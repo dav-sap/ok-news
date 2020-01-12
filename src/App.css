@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700&subset=hebrew');
+
 .App {
   text-align: center;
+  background-color: #000c2d;
+  width: 100%;
+  height: 100%;
 }
+
 
 .App-logo {
   height: 40vmin;
