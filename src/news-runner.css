@@ -24,13 +24,14 @@
 }
 .speed-settings {
 	position: absolute;
-	top: 60%;
+	bottom: 0;
 	color: white;
 	font-family: Heebo, sans-serif;
 	font-size: 20px;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translateX(-50%);
 	direction: rtl;
+	padding-bottom: 20px;
 }
 .news-runner-container {
 	overflow: hidden;
