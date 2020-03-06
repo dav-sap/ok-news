@@ -66,10 +66,10 @@ const NewsRunner = () => {
 		getMakoNews();
 	}, [newCategory]);
 	useEffect(() => {
-		if (runnerNewsRef && runnerNewsRef.current) {
+		if (runnerNewsRef.current) {
 			setScrollStartPos(runnerNewsRef.current.scrollLeft);
 		}
-	}, [runnerNewsRef, runnerNewsRef.current]);
+	}, [runnerNewsRef.current]);
 
 	useEffect(() => {
 		setNews(orderBy(flatten(selectedCategories.map((s) => s.news)), (n1) => new Date(n1.publication_date), ['desc']));
@@ -88,9 +88,11 @@ const NewsRunner = () => {
 				}
 			}, 30);
 		};
-		doInterval()();
+		if (runnerNewsRef.current) {
+			doInterval();
+		}
 		return () => clearInterval(interval);
-	}, [runnerNewsRef, scrollSpeed, runnerNewsRef.current, settingsView]);
+	}, [scrollSpeed, runnerNewsRef.current, settingsView]);
 
 	useEffect(() => {
 		if (scrollEnd) {
@@ -131,7 +133,7 @@ const NewsRunner = () => {
 								</div>
 							) : (
 								news.map((newsItem) => (
-									<NewsItem key={newsItem.publication_date} title={newsItem.title} link={newsItem.link} />
+									<NewsItem key={newsItem.link.slice(50)} title={newsItem.title} link={newsItem.link} />
 								))
 							)}
 						</div>

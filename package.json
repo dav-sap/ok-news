@@ -15,7 +15,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && mv ./build ../oknews/build",
+    "copy_build": "mv ./build ../oknews/build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
