@@ -28,7 +28,7 @@ const CategoryButton = ({selectedCategories, selectCategory, category}) => {
 	const isSelected = useMemo(() => selectedCategories.find((c) => c.id === category.id), [category, selectedCategories]);
 	const onClick = useCallback(() => {
 		selectCategory(category);
-	}, [category]);
+	}, [category, selectCategory]);
 	return (
 		<div className={`category-btn ${isSelected ? 'selected' : ''}`} onClick={onClick}>
 			<span className="material-icons">{isSelected ? 'visibility' : 'visibility_off'}</span>
