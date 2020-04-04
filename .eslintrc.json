@@ -34,6 +34,7 @@
         "object-curly-spacing": "off",
         "object-curly-newline": "off",
         "react/jsx-boolean-value": "off",
+        "react/jsx-props-no-spreading": "off",
         "react/jsx-indent": 0,
         "react/forbid-prop-types": 0,
         "react/jsx-indent-props": 0,

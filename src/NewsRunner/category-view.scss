@@ -1,0 +1,30 @@
+.categories-view {
+	.category-btn {
+		font-family: Heebo, sans-serif;
+		font-size: 32px;
+		font-weight: 700;
+		color: #000c2d;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		direction: rtl;
+		height: 60px;
+		width: 450px;
+		padding-right: 30px;
+		border-radius: 3px;
+		background-color: #e9faf4;
+		margin: auto auto 15px;
+		opacity: 0.4;
+		
+		&:hover {
+			opacity: 0.85;
+		}
+		&.selected {
+			opacity: 1;
+		}
+		.material-icons {
+			margin-left: 30px;
+			font-size: 35px;
+		}
+	}
+}
