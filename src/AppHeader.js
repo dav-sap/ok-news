@@ -19,7 +19,7 @@ const AppHeader = () => {
 				{`${DAYS[now.getDay()]}`}
 			</div>
 			<img src={logo} className="logo" alt="logo" />
-			<div className="desc">כל החדשות המעניינות והרלוונטיות מהאתרים המובילים בישראל.</div>
+			<div className="desc">כל החדשות, במקום אחד.</div>
 		</div>
 	);
 }

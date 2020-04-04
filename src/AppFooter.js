@@ -10,7 +10,7 @@ const AppFooter = ({settingsView, setSettingsView}) => {
 					חדשות
 				</div>
 				<div className={`settings-button ${settingsView === 'filters' ? 'selected' : ''}`} onClick={() => setSettingsView('filters')}>
-					פילטר
+					סנן תוכן
 				</div>
 				<div className={`settings-button ${settingsView === 'contact' ? 'selected' : ''}`} onClick={() => setSettingsView('contact')}>
 					צור קשר
