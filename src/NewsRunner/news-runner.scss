@@ -45,17 +45,28 @@
 			cursor: pointer;
 		}
 	}
-	@media only screen and (min-height: 900px){
+	@media only screen and (min-height: 1000px){
+		.runner-wrapper {
+			max-height: 680px;
+		}
+	}
+	
+	@media only screen and (max-height: 1000px) and (min-height: 940px){
 		.runner-wrapper {
 			max-height: 600px;
 		}
 	}
-	@media only screen and (min-height: 700px) and (min-height: 900px){
+	@media only screen and (min-height: 880px) and (max-height: 940px){
 		.runner-wrapper {
 			max-height: 550px;
 		}
 	}
-	@media only screen and (max-height: 700px) {
+	@media only screen and (min-height: 800px) and (max-height: 880px){
+		.runner-wrapper {
+			max-height: 500px;
+		}
+	}
+	@media only screen and (max-height: 800px) {
 		.runner-wrapper {
 			max-height: 400px;
 		}
