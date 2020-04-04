@@ -1,107 +1,81 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
-import './news-runner.css';
+import gsap from 'gsap';
+import './news-runner.scss';
 import { flatten, orderBy } from 'lodash';
 import logo from './oknews.png';
 
-const NewsItem = ({ title, link }) => {
+const ORIGIN_TO_IMG = {
+	ynet: 'https://m.ynet.co.il/content/images/icons/site/big_ynet_logo.png?v=20200317',
+	mako: 'https://img.mako.co.il/2013/08/15/mako-logo_i.jpg',
+};
+const NewsItem = ({ title, link, source }) => {
+	const itemRef = useRef({});
 	const goToLink = useCallback(() => {
 		window.open(link, '_blank');
 	}, [link]);
+
+	const onRemove = useCallback((e) => {
+		e.stopPropagation();
+		gsap.to(itemRef.current, 1, {ease: 'power1.inOut', opacity: 0, height: 0, scale: 0.6, marginBottom: 0, duration: 2});
+	}, [itemRef]);
 	return (
-		<div className="news-item" onClick={goToLink}>{title}</div>
+		<div className="news-item" ref={itemRef} onClick={goToLink}>
+			<img className={`news-source-img ${source}`} src={ORIGIN_TO_IMG[source]} />
+			<span className="text">{title}</span>
+			<span className="material-icons" onClick={onRemove}>cancel</span>
+		</div>
 	);
 };
+
 const CATEGORIES = [
 	{
 		id: 'news',
-		url: '/mako_news',
+		url: ['/mako_news', '/ynet_news'],
 		label: 'כללי',
 		news: [],
 	},
 	{
 		id: 'sport',
-		url: '/mako_sport',
+		url: ['/mako_sport'],
 		label: 'ספורט',
 		news: [],
 	},
 	{
 		id: 'tarbut',
-		url: '/mako_tarbut',
+		url: ['/mako_tarbut'],
 		label: 'תרבות',
 		news: [],
 	},
 ];
 
-const SPEEDS = [
-	4,
-	6,
-	8,
-	10,
-];
 
 const INITIAL_CAT = CATEGORIES[0];
 const NewsRunner = () => {
 	const [news, setNews] = useState([]);
-	const [scrollStartPos, setScrollStartPos] = useState(0);
-	const [scrollEnd, setScrollEnd] = useState(false);
-	const [settingsView, setSettingsView] = useState(false);
+	const [settingsView, setSettingsView] = useState('news');
 	const [selectedCategories, setSelectedCategories] = useState([INITIAL_CAT]);
 	const [newCategory, setNewCategory] = useState(INITIAL_CAT);
-	const [scrollSpeed, setScrollSpeed] = useState(SPEEDS[0]);
 	const runnerNewsRef = useRef({});
 	useEffect(() => {
-		const getMakoNews = async () => {
+		const getNews = async () => {
 			try {
-				const res = await axios.get(newCategory.url);
+				const res = await Promise.all(newCategory.url.map((url) => axios.get(url)));
+				const flattenResults = flatten(res.map((r) => r.data));
 				setSelectedCategories((all) => {
 					const changedCat = all.find((a) => a.id === newCategory.id);
-					changedCat.news = res.data;
+					changedCat.news = flattenResults;
 					return all.filter((a) => a.id !== newCategory.id).concat([changedCat]);
 				});
 			} catch (e) {
 				console.error(e);
 			}
 		};
-		getMakoNews();
+		getNews();
 	}, [newCategory]);
-	useEffect(() => {
-		if (runnerNewsRef.current) {
-			setScrollStartPos(runnerNewsRef.current.scrollLeft);
-		}
-	}, [runnerNewsRef.current]);
-
 	useEffect(() => {
 		setNews(orderBy(flatten(selectedCategories.map((s) => s.news)), (n1) => new Date(n1.publication_date), ['desc']));
 	}, [selectedCategories]);
-
-	useEffect(() => {
-		let interval;
-		const doInterval = () => {
-			interval = setInterval(() => {
-				runnerNewsRef.current.scrollTo({
-					left: runnerNewsRef.current.scrollLeft - (scrollSpeed),
-					behavior: 'smooth',
-				});
-				if (runnerNewsRef.current.scrollLeft - (scrollSpeed) <= 0) {
-					setScrollEnd(true);
-				}
-			}, 30);
-		};
-		if (runnerNewsRef.current) {
-			doInterval();
-		}
-		return () => clearInterval(interval);
-	}, [scrollSpeed, runnerNewsRef.current, settingsView]);
-
-	useEffect(() => {
-		if (scrollEnd) {
-			runnerNewsRef.current.scrollTo({
-				left: scrollStartPos,
-				behavior: 'smooth',
-			});
-		}
-	}, [scrollEnd, runnerNewsRef.current]);
 
 	const selectCategory = useCallback((cat) => {
 		setSelectedCategories((selectedCats) => {
@@ -113,45 +87,42 @@ const NewsRunner = () => {
 			return selectedCats.concat(cat);
 		});
 	}, []);
-	const changeSettingsView = useCallback(() => {
-		setSettingsView((s) => !s);
+	const changeSettingsView = useCallback((view) => {
+		setSettingsView(view);
 	}, []);
 
+	// <div className="categories-container">
+	// 	{CATEGORIES.map((cat) => (
+	// 		<div key={cat.id} className={`category-btn ${selectedCategories.find((c) => c.id === cat.id) ? 'selected' : ''}`} onClick={() => selectCategory(cat)}>{cat.label}</div>
+	// 	))}
+	// </div>
+	useEffect(() => {
+		gsap.from('.news-item', 1, {ease: 'power1.inOut', opacity: 0, scale: 0.6, duration: 2, stagger: {each: 0.1, y: -100}});
+	}, [news]);
 	return (
 		<div className="news-page">
-			<div className="center-container">
-				<img src={logo} className="logo" alt="logo" />
-				<div className="desc">כל החדשות המעניינות והרלוונטיות מהאתרים המובילים בישראל. </div>
-				<div className="news-runner">
-					<div className="news-runner-container">
-						<div ref={runnerNewsRef} className="runner-wrapper">
-							{settingsView ? (
-								<div className="categories-container">
-									{CATEGORIES.map((cat) => (
-										<div key={cat.id} className={`category-btn ${selectedCategories.find((c) => c.id === cat.id) ? 'selected' : ''}`} onClick={() => selectCategory(cat)}>{cat.label}</div>
-									))}
-								</div>
-							) : (
-								news.map((newsItem) => (
-									<NewsItem key={newsItem.link.slice(50)} title={newsItem.title} link={newsItem.link} />
-								))
-							)}
-						</div>
+
+			<img src={logo} className="logo" alt="logo" />
+			<div className="desc">כל החדשות המעניינות והרלוונטיות מהאתרים המובילים בישראל. </div>
+			<div className="news-runner">
+				<div className="news-runner-container">
+					<div ref={runnerNewsRef} className="runner-wrapper">
+						{news.map((newsItem) => (
+							<NewsItem key={newsItem.id || newsItem.link.slice(50)} {...newsItem} />
+						))}
 					</div>
 				</div>
 			</div>
-			<div className="speed-settings">
-
-				מהירות
-				<span className={`speed-option ${scrollSpeed === SPEEDS[3] ? 'selected' : ''}`} onClick={() => setScrollSpeed(SPEEDS[3])}>8X</span>
-				<span className={`speed-option ${scrollSpeed === SPEEDS[2] ? 'selected' : ''}`} onClick={() => setScrollSpeed(SPEEDS[2])}>4X</span>
-				<span className={`speed-option ${scrollSpeed === SPEEDS[1] ? 'selected' : ''}`} onClick={() => setScrollSpeed(SPEEDS[1])}>2X</span>
-				<span className={`speed-option ${scrollSpeed === SPEEDS[0] ? 'selected' : ''}`} onClick={() => setScrollSpeed(SPEEDS[0])}>1X</span>
-			</div>
 			<div className="footer">
 				<div className="footer-relative">
-					<div className="settings-button" onClick={changeSettingsView}>
-						הגדרות
+					<div className={`settings-button ${settingsView === 'news' ? 'selected' : ''}`} onClick={() => changeSettingsView('news')}>
+						חדשות
+					</div>
+					<div className={`settings-button ${settingsView === 'filters' ? 'selected' : ''}`} onClick={() => changeSettingsView('filters')}>
+						פילטר
+					</div>
+					<div className={`settings-button ${settingsView === 'contact' ? 'selected' : ''}`} onClick={() => changeSettingsView('contact')}>
+						צור קשר
 					</div>
 				</div>
 			</div>
