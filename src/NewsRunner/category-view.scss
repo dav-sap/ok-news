@@ -27,4 +27,18 @@
 			font-size: 35px;
 		}
 	}
+	@media only screen and (max-width: 650px) {
+		.category-btn {
+			overflow: auto;
+			width: 250px;
+			font-size: 15px;
+			height: 50px;
+			padding-right: 15px;
+			
+			.material-icons {
+				margin-left: 20px;
+				font-size: 20px;
+			}
+		}
+	}
 }
