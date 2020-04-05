@@ -27,6 +27,11 @@
 				padding-left: 8px;
 				padding-right: 8px;
 			}
+			&.walla {
+				padding-left: 14px;
+				padding-right: 14px;
+				width: 35px;
+			}
 		}
 		.text {
 			&:hover {
@@ -63,6 +68,8 @@
 			
 			.news-item {
 				font-size: 13px;
+				padding-right: 4px;
+				padding-left: 4px;
 				.news-source-img {
 					width: 30px;
 					
@@ -72,6 +79,11 @@
 					&.ynet {
 						padding-left: 8px;
 						padding-right: 8px;
+					}
+					&.walla {
+						padding-left: 10px;
+						padding-right: 10px;
+						width: 23px;
 					}
 				}
 			}

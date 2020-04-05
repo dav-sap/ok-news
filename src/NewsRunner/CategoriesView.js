@@ -4,18 +4,23 @@ import './category-view.scss';
 export const CATEGORIES = [
 	{
 		id: 'news',
-		url: ['/mako?cat=news', '/ynet?cat=news'],
+		url: ['/mako?cat=news', '/ynet?cat=news', '/walla?cat=news'],
 		label: 'כללי',
 	},
 	{
 		id: 'sport',
-		url: ['/mako?cat=sport', '/ynet?cat=sports'],
+		url: ['/mako?cat=sport', '/ynet?cat=sports', '/walla?cat=sports'],
 		label: 'ספורט',
 	},
 	{
 		id: 'tarbut',
-		url: ['/mako?cat=tarbut'],
+		url: ['/mako?cat=tarbut', '/walla?cat=tarbut', '/walla?cat=celebs'],
 		label: 'תרבות',
+	},
+	{
+		id: 'tech',
+		url: ['/walla?cat=tech'],
+		label: 'טכנולוגיה',
 	},
 	{
 		id: 'fashion',
