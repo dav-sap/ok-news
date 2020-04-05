@@ -23,7 +23,7 @@ const NewsItem = ({ title, link, source }) => {
 		<div className="news-item" ref={itemRef} onClick={goToLink}>
 			<img className={`news-source-img ${source}`} ref={imgRef} src={ORIGIN_TO_IMG[source]} alt={source} />
 			<span className="text">{title}</span>
-			<i className="material-icons" onClick={onRemove}>cancel</i>
+			<button className="material-icons" onClick={onRemove}>cancel</button>
 		</div>
 	);
 };

@@ -42,6 +42,12 @@
 			margin-right: auto;
 			padding-right: 10px;
 			cursor: pointer;
+			border: none;
+			background: transparent;
+			
+			&:focus {
+				outline: none;
+			}
 		}
 	}
 	.runner-wrapper {
