@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Heebo:100,300,400,500,700&subset=hebrew');
+@import "size.scss";
 
 .news-page {
 	text-align: center;
@@ -8,29 +9,35 @@
 	justify-content: center;
 	font-family: Heebo, sans-serif;
 	position: relative;
-	min-height: 630px;
-	.date {
-		color: white;
-		direction: rtl;
-		padding-top: 15px;
-	}
-	.logo {
-		max-width: 320px;
-		margin-top: 90px;
-	}
-	.desc {
-		font-family: Heebo, sans-serif;
-		color: white;
-		margin-top: 5px;
-		margin-bottom: 50px;
-		direction: rtl;
-		font-weight: 300;
-		font-size: 22px;
+	min-height: $app-min-height;
+	
+	.app-header {
+		height: $header-height;
+		
+		.date {
+			color: white;
+			direction: rtl;
+			padding-top: 15px;
+		}
+		
+		.logo {
+			margin-top: 50px;
+			max-width: 320px;
+			margin-bottom: auto;
+		}
+		
+		.desc {
+			font-family: Heebo, sans-serif;
+			color: white;
+			direction: rtl;
+			font-weight: 300;
+			font-size: 22px;
+		}
 	}
 	.footer {
 		position: absolute;
 		bottom: 0;
-		height: 40px;
+		height: $footer-height;
 		width: 100%;
 		
 		.footer-relative {
@@ -41,6 +48,8 @@
 			flex-direction: row;
 			direction: rtl;
 			justify-content: center;
+			align-items: center;
+			
 			.settings-button {
 				color: white;
 				padding-left: 10px;
@@ -55,14 +64,17 @@
 		}
 	}
 	@media only screen and (max-width: 650px), (max-height: 750px) {
-		.logo {
-			max-width: 180px;
-			margin-top: 40px;
+		.app-header {
+			height: $small-header-height;
+			.logo {
+				max-width: 180px;
+				margin-top: 40px;
+			}
+			.desc {
+				font-family: Heebo, sans-serif;
+				font-size: 11px;
+			}
 		}
-		.desc {
-			font-family: Heebo, sans-serif;
-			margin-bottom: 40px;
-			font-size: 11px;
-		}
+		
 	}
 }
