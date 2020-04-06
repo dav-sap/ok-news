@@ -46,7 +46,7 @@ const NewsRunner = ({settingsView}) => {
 	}, []);
 
 	useEffect(() => {
-		gsap.from('.news-item', 1, {ease: 'power1.inOut', opacity: 0, scale: 0.6, duration: 2, stagger: {each: 0.1, y: -100}});
+		gsap.from('.news-item', {opacity: 0.6, scale: 0.8, duration: 0.7, ease: 'elastic.out(1, 0.85)', stagger: {each: 0.1, y: 30}});
 	}, [news]);
 
 	const view = useMemo(() => {

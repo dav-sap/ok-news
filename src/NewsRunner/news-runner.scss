@@ -54,7 +54,7 @@
 		max-height: calc(100vh - #{$header-height} - #{$footer-height});
 		min-height: calc(#{$app-min-height} - #{$small-header-height} - #{$footer-height});
 		overflow: auto;
-		max-width: 1000px;
+		max-width: 1200px;
 		min-width: 600px;
 		margin: auto;
 		padding-right: 15px;
