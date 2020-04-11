@@ -5,10 +5,16 @@ import './news-runner.scss';
 import { flatten, orderBy } from 'lodash';
 import NewsItem from './NewsItem/NewsItem';
 import CategoriesView, {CATEGORIES} from './CategoriesView';
+import {safeParsing} from '../utils';
+import TweetItem from './TweetItem/TweetItem';
 
 const NewsView = ({news}) => (
-	news.map((newsItem) => (
-		<NewsItem key={newsItem.id || newsItem.link.slice(50)} {...newsItem} />
+	orderBy(news, ['dateTimestamp'], ['desc']).map((item) => (
+		item.type === 'tweet' ? (
+			<TweetItem key={item.uuid} {...item} />
+		) : (
+			<NewsItem key={item.uuid} {...item} />
+		)
 	))
 );
 
@@ -19,13 +25,24 @@ const NewsRunner = ({settingsView}) => {
 	useEffect(() => {
 		const getNews = async () => {
 			try {
-				const res = await Promise.all(flatten(selectedCategories.map((cat) => cat.url.map((url) => axios.get(url)))));
-				const flattenResults = flatten(res.map((r) => r.data)).map(r => {
+				const res = await Promise.all([axios.get('/tweets'), ...flatten(selectedCategories.map((cat) => cat.url.map((url) => axios.get(url))))]);
+				const tweets = res[0].data.map((tweet) => {
+					const date = new Date(tweet.date);
+					const {_id: uuid} = tweet;
+					return {
+						...tweet,
+						date,
+						uuid,
+						type: 'tweet',
+						dateTimestamp: date.getTime(),
+					};
+				});
+				const flattenResults = flatten(res.slice(1).map((r) => r.data)).map((r) => {
 					const date = new Date(r.publication_date);
 					return {...r, publication_date: date, dateTimestamp: date.getTime()};
 				});
-				console.log(flattenResults)
-				setNews(orderBy(flattenResults, ['dateTimestamp'] , ['desc']));
+				const dismissed = safeParsing(localStorage.getItem('dismissedNews')) || [];
+				setNews([...tweets, ...flattenResults].filter((r) => !dismissed.some((d) => d.id === r.uuid)));
 			} catch (e) {
 				console.error(e);
 			}
@@ -46,7 +63,7 @@ const NewsRunner = ({settingsView}) => {
 	}, []);
 
 	useEffect(() => {
-		gsap.from('.news-item', {opacity: 0.6, scale: 0.8, duration: 0.7, ease: 'elastic.out(1, 0.85)', stagger: {each: 0.1, y: 30}});
+		gsap.from('.item', {opacity: 0.6, scale: 0.8, duration: 0.7, ease: 'elastic.out(1, 0.85)', stagger: {each: 0.1, y: 30}});
 	}, [news]);
 
 	const view = useMemo(() => {
