@@ -127,10 +127,28 @@
 			padding-right: 15px;
 			padding-left: 15px;
 			
-			.news-item {
+			.news-item, .tweet-item {
 				font-size: 13px;
 				padding-right: 4px;
 				padding-left: 4px;
+				.tweet-footer {
+					margin-right: 48px;
+					padding-top: 10px;
+					padding-bottom: 10px;
+					.comments, .retweets, .likes {
+						margin-left: 50px;
+					}
+					.cloud-img, .retweet-icon, .likes-icon {
+						height: 15px;
+						width: 15px;
+						margin-right: 5px;
+					}
+				}
+				
+				.tweet-source-img {
+					width: 30px;
+					height: 30px;
+				}
 				.news-source-img {
 					width: 30px;
 					
